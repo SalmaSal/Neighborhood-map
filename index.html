@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+     <link rel="stylesheet" type="text/css" href="style.css">
+ </head>
+ 
+ <body>    
+  <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">My Favorite locations In Riyadh
+        <span class="caret"></span></button>
+        <ul class="dropdown-menu" data-bind= "foreach:locationsArray">
+          <li><a>Lousen</a></li>
+          <li><a>PNU</a></li>
+          <li><a>Ruben Plaza </a></li>
+          <li><a>Ritz-Carilton</a></li>
+          <li><a>Panorama Mall</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    
+          
+          <div id="map"></div>
+          
+          <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBe-Tcp6j9ko48OJDn4IHQJJSEfbRKkJxc&callback=initMap"async defer></script>
+          <script src="app.js"></script>
+          <script src="knockout.js"></script>
+        </body>
+       </html>
+      
