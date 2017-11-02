@@ -1,0 +1,33 @@
+body {
+    font-family: "Lato", sans-serif;
+}
+
+.navbar {
+    border-radius: 0px;
+    margin-bottom: 0;
+}
+
+.nav-title {
+    font-size: 25px;
+    text-transform: uppercase;
+    color: white;
+}
+
+#map {
+    margin: 0;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    z-index: -4;
+}
+
+.sidenav {
+    margin: 0;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+}
