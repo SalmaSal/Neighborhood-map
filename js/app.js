@@ -14,12 +14,12 @@ var locations = [{
     },
     description: 'first university for femel only'
 }, {
-    title: 'Diriyah',
+    title: 'Kingdom Centre',
     address: {
-        lat: 24.749729,
-        lng: 46.535307
+        lat: 24.712045,
+        lng: 46.675962
     },
-    description: 'Resturent'
+    description: 'shoping mall '
 }, {
     title: 'The Ritz-Carlton Hotel Company',
     address: {
@@ -28,12 +28,12 @@ var locations = [{
     },
     description: "Hotel"
 }, {
-    title: 'Lusin restaurant',
+    title: 'King Abdullah Financial District',
     address: {
-        lat: 24.697987,
-        lng: 46.683494
+        lat: 24.761956,
+        lng: 46.640434
     },
-    description: 'Armanian resturent'
+    description: 'King Abdullah Financial District'
 }];
 //=======declare global var==========//
 var map;
