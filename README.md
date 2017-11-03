@@ -1,5 +1,5 @@
 # Neighborhood-map
-
+[Demo](https://salmasal.github.io/Neighborhood-map/)
 Single-page application featuring a map of lovely palce in Riyadh City you would like to visit. You can select the markers on the map, visit the wikipedia artical about that location.
 
 ## Technical Specifications
@@ -11,4 +11,4 @@ Single-page application featuring a map of lovely palce in Riyadh City you would
  * Download this project to your machine. 
  * Run index.html
  
- [Demo](https://salmasal.github.io/Neighborhood-map/)
+ 
