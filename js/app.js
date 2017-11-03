@@ -68,17 +68,16 @@ function initMap() {
         });
         // Populates markers array
         markers.push(marker);
-        marker.addListener('click', markerClickHandler);    
+        marker.addListener('click', markerClickHandler);
         // Adjusts the map's bounds
         bounds.extend(markers[i].position);
     }
-            // Opens up an infowindow when a marker is clicked 
-
+    // Opens up an infowindow when a marker is clicked 
     function markerClickHandler() {
         // Set the selected for this as true
         populateInfoWindow(this, infoWindow);
         toggleBounce(marker);
-      }
+    }
     map.fitBounds(bounds);
 }
 // This function populates the infowindow when the marker is clicked. We'll only allow
@@ -106,7 +105,6 @@ function populateInfoWindow(marker, infowindow) {
             }
         }
     });
-    
 }
 //Makes the icon bounce only once when clicked
 function toggleBounce(marker) {
@@ -122,12 +120,10 @@ function ViewModel() {
     self.testLocations = ko.observableArray(locations); //for serch box filter the list of locations
     // Collection of testLocation after going through search filter
     self.filteredTestsuites = ko.computed(function() {
-        
         // If many white spaces in list, replace with only one white space
         fText = self.filterText().replace(/\s+/g, ' ');
-       // var array = self.testLocations();
+        // var array = self.testLocations();
         // If there is anything in the search box, filter for this
-        
         // As of now this does not divide the filterText and only searches the title
         var filteredCollection = ko.utils.arrayFilter(self.testLocations(), function(test) {
             if (fText.length) return test.title.toUpperCase().indexOf(fText.toUpperCase()) >= 0;
@@ -138,12 +134,12 @@ function ViewModel() {
     self.openInfoWindow = function(location) {
         openInfoWindow(location);
     };
-    self.resetMarkers=function(markers){
+    self.resetMarkers = function(markers) {
         resetMarkers(markers);
     };
 }
 //function to redeclare the markers
-function resetMarkers(markers){
+function resetMarkers(markers) {
     for (var i = 0; i < locations.length; i++) {
         var position = locations[i].address;
         var title = locations[i].title;
@@ -159,16 +155,16 @@ function resetMarkers(markers){
         // Populates markers array
         markers.push(marker);
         // Opens up an infowindow when a marker is clicked 
-        marker.addListener('click', markerClickHandler);    
+        marker.addListener('click', markerClickHandler);
         // Adjusts the map's bounds
         bounds.extend(markers[i].position);
     }
-            // Opens up an infowindow when a marker is clicked
+    // Opens up an infowindow when a marker is clicked
     function markerClickHandler() {
         // Set the selected for this as true
         populateInfoWindow(this, infoWindow);
         toggleBounce(marker);
-      }
+    }
 }
 //open when marker filtered 
 function openInfoWindow(filteredCollection) {
@@ -180,12 +176,11 @@ function openInfoWindow(filteredCollection) {
             markers[i].setMap(map);
         } else {
             //clear all marker not match filteredCollection.title  
-            markers[i].setMap(null);}
-    }  return setTimeout(resetMarkers(markers), 10000);
-} 
-    
-
-
+            markers[i].setMap(null);
+        }
+    }
+    return setTimeout(resetMarkers(markers), 10000);
+}
 //function to handel MapError
 function mapError() {
     alert("Map could not be loaded . Please try again");
