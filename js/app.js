@@ -172,8 +172,8 @@ function openInfoWindow(filteredCollection) {
             //clear all marker not match filteredCollection.title  
             markers[i].setMap(null);
         }
-    }
-}  return setTimeout(resetMarkers(markers), 10000);
+    }  return setTimeout(resetMarkers(markers), 10000);
+}
 //function to handel MapError
 function mapError() {
     alert("Map could not be loaded . Please try again");
