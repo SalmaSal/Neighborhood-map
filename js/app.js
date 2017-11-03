@@ -134,6 +134,32 @@ function ViewModel() {
         openInfoWindow(location);
     };
 }
+
+//function to redeclare the markers
+function resetMarkers(markers){
+    for (var i = 0; i < locations.length; i++) {
+        var position = locations[i].address;
+        var title = locations[i].title;
+        var description = locations[i].description;
+        marker = new google.maps.Marker({
+            map: map,
+            position: position,
+            title: title,
+            description: description,
+            animation: google.maps.Animation.DROP,
+            id: i
+        });
+        // Populates markers array
+        markers.push(marker);
+        // Opens up an infowindow when a marker is clicked 
+        marker.addListener('click', function() {
+            populateInfoWindow(this, infoWindow);
+            toggleBounce(marker);
+        });       
+        // Adjusts the map's bounds
+        bounds.extend(markers[i].position);
+    }
+}
 //open when marker filtered 
 function openInfoWindow(filteredCollection) {
     // loop through the markers to find the matching title
@@ -147,7 +173,7 @@ function openInfoWindow(filteredCollection) {
             markers[i].setMap(null);
         }
     }
-}
+}  return setTimeout(resetMarkers(markers), 10000);
 //function to handel MapError
 function mapError() {
     alert("Map could not be loaded . Please try again");
