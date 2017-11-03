@@ -40,6 +40,7 @@ var map;
 var infoWindows;
 var bounds;
 var markers = [];
+var call;
 //google map init
 function initMap() {
     var RiyadhCity = {
@@ -65,23 +66,22 @@ function initMap() {
             animation: google.maps.Animation.DROP,
             id: i
         });
-          // Populates markers array
-          markers.push(marker);
-          // Opens up an infowindow when a marker is clicked
-          marker.addListener('click', function() {
-              populateInfoWindow(this, infoWindow);
-              toggleBounce(marker);
-          });
-          // Adjusts the map's bounds
-          bounds.extend(markers[i].position);
-  }
-      map.fitBounds(bounds);
+        // Populates markers array
+        markers.push(marker);
+        // Opens up an infowindow when a marker is clicked
+        //call.MarkerCliked(markers);
+        marker.addListener('click', function() {
+            populateInfoWindow(this, infoWindow);
+            toggleBounce(marker);
+        });
+        // Adjusts the map's bounds
+        bounds.extend(markers[i].position);
+    }
+    map.fitBounds(bounds);
 }
-
 // This function populates the infowindow when the marker is clicked. We'll only allow
 // one infowindow which will open at the marker that is clicked, and populate based
 // on that markers position the wiki artical besed in title .
-
 function populateInfoWindow(marker, infowindow) {
     var wikiURL = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + marker.title + '&format=json&callback=wikiCallback';
     var wikiTimeout = setTimeout(function() {
@@ -99,7 +99,7 @@ function populateInfoWindow(marker, infowindow) {
                 infowindow.addListener('closeclick', function() {
                     infowindow.setMarker = null;
                 });
-                infowindow.setContent('<div>' + '<a href ="' + articleList.web_url + '">' + articleName + '</a>' + '</div>');
+                infowindow.setContent('<div>' + '<a href ="' + articleList + '">' + articleName + '</a>' + '</div>');
                 clearTimeout(wikiTimeout);
             }
         }
@@ -116,44 +116,42 @@ function toggleBounce(marker) {
 function ViewModel() {
     var self = this;
     self.filterText = ko.observable(""); // Text from search field
-    self.testLocations = ko.observableArray(locations);//for serch box filter the list of locations
-    
+    self.testLocations = ko.observableArray(locations); //for serch box filter the list of locations
+    //self.filteredList  =ko.observableArray();
     // Collection of testLocation after going through search filter
     self.filteredTestsuites = ko.computed(function() {
         // If many white spaces in list, replace with only one white space
         fText = self.filterText().replace(/\s+/g, ' ');
         // If there is anything in the search box, filter for this
-        // As of now this does not divide the filterText and only searches the title 
+        // As of now this does not divide the filterText and only searches the title
         var filteredCollection = ko.utils.arrayFilter(self.testLocations(), function(test) {
-            if (fText.length) return (test.title.toUpperCase().indexOf(fText.toUpperCase()) >= 0);
+            if (fText.length) return test.title.toUpperCase().indexOf(fText.toUpperCase()) >= 0;
             else return 1;
-        }); 
+        });
         return filteredCollection;
     }, self);
-   
-    self.openInfoWindow = function(location){
+    self.openInfoWindow = function(location) {
         openInfoWindow(location);
     };
 }
-
 //open when marker filtered 
 function openInfoWindow(filteredCollection) {
-  
     // loop through the markers to find the matching title
     for (var i in markers) {
         if (markers[i].title === filteredCollection.title) {
+            markers[i].setMap(map); //set matche marker on map
             populateInfoWindow(markers[i], infoWindow);
             toggleBounce(markers[i]);
-           
+        } else {
+            //clear all marker not match filteredCollection.title  
+            markers[i].setMap(null);
         }
     }
 }
-
 //function to handel MapError
 function mapError() {
     alert("Map could not be loaded . Please try again");
 }
-
 $(document).ready(function() {
     var vm = new ViewModel();
     ko.applyBindings(vm);
