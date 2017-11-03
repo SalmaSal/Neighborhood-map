@@ -10,3 +10,5 @@ Single-page application featuring a map of lovely palce in Riyadh City you would
 ## How to use this project
  * Download this project to your machine. 
  * Run index.html
+ 
+ [Demo](https://salmasal.github.io/Neighborhood-map/)
