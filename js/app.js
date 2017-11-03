@@ -40,7 +40,7 @@ var map;
 var infoWindows;
 var bounds;
 var markers = [];
-var call;
+var marker;
 //google map init
 function initMap() {
     var RiyadhCity = {
@@ -58,7 +58,7 @@ function initMap() {
         var position = locations[i].address;
         var title = locations[i].title;
         var description = locations[i].description;
-        var marker = new google.maps.Marker({
+        marker = new google.maps.Marker({
             map: map,
             position: position,
             title: title,
@@ -68,15 +68,17 @@ function initMap() {
         });
         // Populates markers array
         markers.push(marker);
-        // Opens up an infowindow when a marker is clicked
-        //call.MarkerCliked(markers);
-        marker.addListener('click', function() {
-            populateInfoWindow(this, infoWindow);
-            toggleBounce(marker);
-        });
+        marker.addListener('click', markerClickHandler);    
         // Adjusts the map's bounds
         bounds.extend(markers[i].position);
     }
+            // Opens up an infowindow when a marker is clicked 
+
+    function markerClickHandler() {
+        // Set the selected for this as true
+        populateInfoWindow(this, infoWindow);
+        toggleBounce(marker);
+      }
     map.fitBounds(bounds);
 }
 // This function populates the infowindow when the marker is clicked. We'll only allow
@@ -104,6 +106,7 @@ function populateInfoWindow(marker, infowindow) {
             }
         }
     });
+    
 }
 //Makes the icon bounce only once when clicked
 function toggleBounce(marker) {
@@ -117,12 +120,14 @@ function ViewModel() {
     var self = this;
     self.filterText = ko.observable(""); // Text from search field
     self.testLocations = ko.observableArray(locations); //for serch box filter the list of locations
-    //self.filteredList  =ko.observableArray();
     // Collection of testLocation after going through search filter
     self.filteredTestsuites = ko.computed(function() {
+        
         // If many white spaces in list, replace with only one white space
         fText = self.filterText().replace(/\s+/g, ' ');
+       // var array = self.testLocations();
         // If there is anything in the search box, filter for this
+        
         // As of now this does not divide the filterText and only searches the title
         var filteredCollection = ko.utils.arrayFilter(self.testLocations(), function(test) {
             if (fText.length) return test.title.toUpperCase().indexOf(fText.toUpperCase()) >= 0;
@@ -133,8 +138,10 @@ function ViewModel() {
     self.openInfoWindow = function(location) {
         openInfoWindow(location);
     };
+    self.resetMarkers=function(markers){
+        resetMarkers(markers);
+    };
 }
-
 //function to redeclare the markers
 function resetMarkers(markers){
     for (var i = 0; i < locations.length; i++) {
@@ -152,28 +159,33 @@ function resetMarkers(markers){
         // Populates markers array
         markers.push(marker);
         // Opens up an infowindow when a marker is clicked 
-        marker.addListener('click', function() {
-            populateInfoWindow(this, infoWindow);
-            toggleBounce(marker);
-        });       
+        marker.addListener('click', markerClickHandler);    
         // Adjusts the map's bounds
         bounds.extend(markers[i].position);
     }
+            // Opens up an infowindow when a marker is clicked
+    function markerClickHandler() {
+        // Set the selected for this as true
+        populateInfoWindow(this, infoWindow);
+        toggleBounce(marker);
+      }
 }
 //open when marker filtered 
 function openInfoWindow(filteredCollection) {
     // loop through the markers to find the matching title
     for (var i in markers) {
         if (markers[i].title === filteredCollection.title) {
-            markers[i].setMap(map); //set matche marker on map
             populateInfoWindow(markers[i], infoWindow);
             toggleBounce(markers[i]);
+            markers[i].setMap(map);
         } else {
             //clear all marker not match filteredCollection.title  
-            markers[i].setMap(null);
-        }
+            markers[i].setMap(null);}
     }  return setTimeout(resetMarkers(markers), 10000);
-}
+} 
+    
+
+
 //function to handel MapError
 function mapError() {
     alert("Map could not be loaded . Please try again");
