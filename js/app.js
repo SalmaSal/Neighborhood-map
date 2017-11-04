@@ -40,7 +40,7 @@ function initMap() {
     function markerClickHandler() {
         // Set the selected for this as true
         populateInfoWindow(this, infoWindow);
-        toggleBounce(marker);
+        toggleBounce(this);
       }
     map.fitBounds(bounds);
 }
@@ -129,7 +129,7 @@ function resetMarkers(markers){
     function markerClickHandler() {
         // Set the selected for this as true
         populateInfoWindow(this, infoWindow);
-        toggleBounce(marker);
+        toggleBounce(this);
       }
 }
 //open when marker filtered 
