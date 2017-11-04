@@ -31,17 +31,20 @@ function initMap() {
         });
         // Populates markers array
         markers.push(marker);
-        marker.addListener('click', markerClickHandler);    
+        marker.setMap(map);
+        // Opens up an infowindow when a marker is clicked 
+        marker.addListener('click', markerClickHandler);
+        // Call marker of locations to the appViewModel
+        vm.locations()[i].marker = marker;
         // Adjusts the map's bounds
         bounds.extend(markers[i].position);
     }
-            // Opens up an infowindow when a marker is clicked 
 
     function markerClickHandler() {
         // Set the selected for this as true
         populateInfoWindow(this, infoWindow);
         toggleBounce(this);
-      }
+    }
     map.fitBounds(bounds);
 }
 // This function populates the infowindow when the marker is clicked. We'll only allow
@@ -81,78 +84,37 @@ function toggleBounce(marker) {
 function ViewModel() {
     var self = this;
     self.filterText = ko.observable(""); // Text from search field
-    self.testLocations = ko.observableArray(locations); //for serch box filter the list of locations
-    // Collection of testLocation after going through search filter
-    self.filteredTestsuites = ko.computed(function() {
-        
-        // If many white spaces in list, replace with only one white space
-        fText = self.filterText().replace(/\s+/g, ' ');
-       // var array = self.testLocations();
-        // If there is anything in the search box, filter for this
-        
-        // As of now this does not divide the filterText and only searches the title
-        var filteredCollection = ko.utils.arrayFilter(self.testLocations(), function(test) {
-            if (fText.length) return test.title.toUpperCase().indexOf(fText.toUpperCase()) >= 0;
-            else return 1;
+    self.locations = ko.observableArray(locations);
+    self.testLocations = ko.observableArray([]); //for serch box filter the list of locations
+    self.map = map;
+    self.testLocations = ko.computed(function() {
+        return ko.utils.arrayFilter(self.locations(), function(item) {
+            if (item.title.toLowerCase().indexOf(self.filterText().toLowerCase()) !== -1) {
+                // if it exists set the map view to the marker if not remove all markers
+                if (item.marker) item.marker.setVisible(true);
+            } else {
+                if (item.marker) item.marker.setVisible(false);
+            }
+            return item.title.toLowerCase().indexOf(self.filterText().toLowerCase()) !== -1;
         });
-        return filteredCollection;
     }, self);
     self.openInfoWindow = function(location) {
         openInfoWindow(location);
     };
-    self.resetMarkers=function(markers){
-        resetMarkers(markers);
-    };
-}
-//function to redeclare the markers
-function resetMarkers(markers){
-    for (var i = 0; i < locations.length; i++) {
-        var position = locations[i].address;
-        var title = locations[i].title;
-        var description = locations[i].description;
-        marker = new google.maps.Marker({
-            map: map,
-            position: position,
-            title: title,
-            description: description,
-            animation: google.maps.Animation.DROP,
-            id: i
-        });
-        // Populates markers array
-        markers.push(marker);
-        // Opens up an infowindow when a marker is clicked 
-        marker.addListener('click', markerClickHandler);    
-        // Adjusts the map's bounds
-        bounds.extend(markers[i].position);
-    }
-            // Opens up an infowindow when a marker is clicked
-    function markerClickHandler() {
-        // Set the selected for this as true
-        populateInfoWindow(this, infoWindow);
-        toggleBounce(this);
-      }
 }
 //open when marker filtered 
-function openInfoWindow(filteredCollection) {
+function openInfoWindow(testLocations) {
     // loop through the markers to find the matching title
     for (var i in markers) {
-        if (markers[i].title === filteredCollection.title) {
+        if (markers[i].title === testLocations.title) {
             populateInfoWindow(markers[i], infoWindow);
             toggleBounce(markers[i]);
-            markers[i].setMap(map);
-        } else {
-            //clear all marker not match filteredCollection.title  
-            markers[i].setMap(null);}
-    }  return setTimeout(resetMarkers(markers), 10000);
-} 
-    
-
-
+        }
+    }
+}
 //function to handel MapError
 function mapError() {
     alert("Map could not be loaded . Please try again");
 }
-$(document).ready(function() {
-    var vm = new ViewModel();
-    ko.applyBindings(vm);
-});
+var vm = new ViewModel();
+ko.applyBindings(vm);
